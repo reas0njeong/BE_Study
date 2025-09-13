@@ -1,0 +1,30 @@
+server:
+  port: 8090
+spring:
+  datasource:
+    url: jdbc:postgresql://reas0njeong.internal:5432/demo
+    username: postgres
+    password: cMza3fwaqn7Coj6
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        format_sql: false
+        highlight_sql: false
+        use_sql_comments: false
+logging:
+  level:
+    com.ll.demo03: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.jdbc.bind: INFO
+    org.hibernate.orm.jdbc.extract: INFO
+    org.springframework.transaction.interceptor: INFO
+
+
+
+custom:
+  site:
+    name:"My site Prod"
