@@ -1,6 +1,8 @@
 server:
   port: 8070
 spring:
+  output:
+    ansi:
   profiles:
     active: dev
     include: secret
@@ -30,4 +32,4 @@ logging:
 
 custom:
   site:
-    name:"My site"
+    name: "My site"

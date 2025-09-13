@@ -5,14 +5,17 @@ import com.ll.demo03.domain.member.member.entity.Member;
 import com.ll.demo03.domain.member.member.service.MemberService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.annotation.Order;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class All {
 
     @Lazy
@@ -22,6 +25,7 @@ public class All {
     private final ArticleService articleService;
 
     @Bean
+    @Order(3)
     public ApplicationRunner initAll() {
         return args -> {
             self.work1();
@@ -30,6 +34,7 @@ public class All {
 
     @Transactional
     public void work1() {
+        log.debug("initAll started");
         if (memberService.count() > 0) return;
 
         Member memberSystem = memberService.join("system","1234", "시스템").getData();

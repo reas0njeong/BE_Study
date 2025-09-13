@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 
 @Profile("!prod")
 @Configuration
@@ -25,6 +26,7 @@ public class NotProd {
     private final ArticleService articleService;
 
     @Bean
+    @Order(4)
     public ApplicationRunner initNotProd() {
         return args -> {
             self.work1();

@@ -27,4 +27,4 @@ logging:
 
 custom:
   site:
-    name:"My site Prod"
+    name: "My site Prod"
