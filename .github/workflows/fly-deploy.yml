@@ -32,6 +32,6 @@ jobs:
 
       - name: Deploy to Fly.io
         env:
-          FLY_API_TOKEN: ${{ FlyV1 fm2_lJPECAAAAAAACgwGxBBsNaF0/0NVfXAf/NojRnvlwrVodHRwczovL2FwaS5mbHkuaW8vdjGWAJLOABNnbx8Lk7lodHRwczovL2FwaS5mbHkuaW8vYWFhL3YxxDwJoO+sLk55Tsn0PIP0u7JKPe4H0FjwLM/9Li5bfaJgl+8sbA908d4p4G7fADTHUzvfEOgO4g/LnMAYJM7EThuRLK9USqFqwdLYVOWlQeXn6CapFroW90EHMC74n5LwzosOLJj2T3CScvhNXh8JtGBihvl4/Cn+JiWYPfnlktUbgOlevC0NfP48ueAbeA2SlAORgc4Aml0PHwWRgqdidWlsZGVyH6J3Zx8BxCDo8HvXgvQdSefsbGJtSePjRqltmf3Y3nNXGrBvfYHbgQ==,fm2_lJPEThuRLK9USqFqwdLYVOWlQeXn6CapFroW90EHMC74n5LwzosOLJj2T3CScvhNXh8JtGBihvl4/Cn+JiWYPfnlktUbgOlevC0NfP48ueAbeMQQ76OA6OETqB0EgF+mrx0na8O5aHR0cHM6Ly9hcGkuZmx5LmlvL2FhYS92MZgEks5oynJGzo5ieGQXzgASpXoKkc4AEqV6DMQQJVd9SKu+yvEmX9KlyTvic8QgjU6JBXow1SPIL8KmsCCDbatQInDCOoXOAlrl4yZUC80= }}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
         run: |
           flyctl deploy --app be-study --remote-only --detach
