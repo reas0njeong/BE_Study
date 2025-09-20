@@ -1,5 +1,6 @@
 package com.ll.demo03.domain.member.member.controller;
 
+import com.ll.demo03.domain.member.member.dto.MemberDto;
 import com.ll.demo03.domain.member.member.entity.Member;
 import com.ll.demo03.domain.member.member.service.MemberService;
 import com.ll.demo03.global.rsData.RsData;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Slf4j
 public class ApiV1MemberController {
     private final MemberService memberService;
@@ -35,15 +38,20 @@ public class ApiV1MemberController {
     @AllArgsConstructor
     @Getter
     public static class MemberJoinResBody {
-        Member item;
+        MemberDto item;
     }
 
     @PostMapping("")
+    @Transactional
     public RsData<MemberJoinResBody> join(@RequestBody @Valid MemberJoinReqBody reBody) {
         RsData<Member> joinRs = memberService.join(reBody.username, reBody.password, reBody.nickname);
 
         return joinRs.newDataOf(
-                new MemberJoinResBody(joinRs.getData())
+                new MemberJoinResBody(
+                        new MemberDto(
+                                joinRs.getData()
+                        )
+                )
         );
     }
 

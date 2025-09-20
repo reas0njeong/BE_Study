@@ -19,16 +19,17 @@ public class ResponseAspect {
                 within
                 (
                     @org.springframework.web.bind.annotation.RestController *
-            )
-            &&
-            (
-                @annotation(org.springframework.web.bind.annotation.GetMapping)
-                ||
-                @annotation(org.springframework.web.bind.annotation.PostMapping)
-                ||
-                @annotation(org.springframework.web.bind.annotation.PutMapping)
-                ||
-                @annotation(org.springframework.web.bind.annotation.DeleteMapping)
+                )
+                &&
+                (
+                    @annotation(org.springframework.web.bind.annotation.GetMapping)
+                    ||
+                    @annotation(org.springframework.web.bind.annotation.PostMapping)
+                    ||
+                    @annotation(org.springframework.web.bind.annotation.PutMapping)
+                    ||
+                    @annotation(org.springframework.web.bind.annotation.DeleteMapping)
+                )
             )
             ||
             @annotation(org.springframework.web.bind.annotation.ResponseBody)
@@ -43,6 +44,5 @@ public class ResponseAspect {
         }
 
         return proceed;
-
     }
 }
