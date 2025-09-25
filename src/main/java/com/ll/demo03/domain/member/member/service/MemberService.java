@@ -3,19 +3,23 @@ package com.ll.demo03.domain.member.member.service;
 
 import com.ll.demo03.domain.member.member.entity.Member;
 import com.ll.demo03.domain.member.member.repository.MemberRepository;
-import com.ll.demo03.global.rsData.RsData;
 import com.ll.demo03.global.exception.GlobalException;
+import com.ll.demo03.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.ScopedValue;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
@@ -29,8 +33,9 @@ public class MemberService {
 
         Member member = Member.builder()
                 .username(username)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .nickname(nickname)
+                .apiKey(UUID.randomUUID().toString())
                 .build();
 
         memberRepository.save(member);
@@ -44,5 +49,17 @@ public class MemberService {
 
     public long count() {
         return memberRepository.count();
+    }
+
+    public boolean matchPassword(String actorPassword, String password) {
+        return passwordEncoder.matches(actorPassword, password);
+    }
+
+    public Optional <Member> findById(long id) {
+        return memberRepository.findById(id);
+    }
+
+    public Optional <Member> findByApiKey(String apiKey) {
+        return memberRepository.findByApiKey(apiKey);
     }
 }

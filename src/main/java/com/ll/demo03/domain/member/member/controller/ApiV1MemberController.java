@@ -79,12 +79,11 @@ public class ApiV1MemberController {
                 .findByUsername(reqBody.username)
                 .orElseThrow(() -> new GlobalException("401-1", "해당 회원이 존재하지 않습니다."));
 
-        if (!member.getPassword().equals(reqBody.password)) {
+        if (!memberService.matchPassword(reqBody.password, member.getPassword())) {
             throw new GlobalException("401-2", "비밀번호가 일치하지 않습니다.");
         }
 
-        rq.setCookie("actorUsername", member.getUsername());
-        rq.setCookie("actorPassword", member.getPassword());
+        rq.setCookie("apiKey", member.getApiKey());
 
         return RsData.of(
                 "200-1",
