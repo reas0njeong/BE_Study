@@ -1,8 +1,10 @@
 package com.ll.demo03.domain.member.member.controller;
 
+import com.ll.demo03.domain.auth.auth.service.AuthTokenService;
 import com.ll.demo03.domain.member.member.dto.MemberDto;
 import com.ll.demo03.domain.member.member.entity.Member;
 import com.ll.demo03.domain.member.member.service.MemberService;
+import com.ll.demo03.global.app.AppConfig;
 import com.ll.demo03.global.exception.GlobalException;
 import com.ll.demo03.global.rq.Rq;
 import com.ll.demo03.global.rsData.RsData;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class ApiV1MemberController {
     private final MemberService memberService;
+    private final AuthTokenService authTokenService;
     private final Rq rq;
 
     @AllArgsConstructor
@@ -83,6 +86,8 @@ public class ApiV1MemberController {
             throw new GlobalException("401-2", "비밀번호가 일치하지 않습니다.");
         }
 
+        String accessToken = authTokenService.genToken(member, AppConfig.getAccessTokenExpirationSec());
+        rq.setCookie("accessToken", accessToken);
         rq.setCookie("apiKey", member.getApiKey());
 
         return RsData.of(
