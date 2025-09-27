@@ -35,7 +35,7 @@ public class MemberService {
                 .username(username)
                 .password(passwordEncoder.encode(password))
                 .nickname(nickname)
-                .apiKey(UUID.randomUUID().toString())
+                .refreshToken(UUID.randomUUID().toString())
                 .build();
 
         memberRepository.save(member);
@@ -55,11 +55,11 @@ public class MemberService {
         return passwordEncoder.matches(actorPassword, password);
     }
 
-    public Optional <Member> findById(long id) {
+    public Optional<Member> findById(long id) {
         return memberRepository.findById(id);
     }
 
-    public Optional <Member> findByApiKey(String apiKey) {
-        return memberRepository.findByApiKey(apiKey);
+    public Optional<Member> findByRefreshToken(String refreshToken) {
+        return memberRepository.findByRefreshToken(refreshToken);
     }
 }

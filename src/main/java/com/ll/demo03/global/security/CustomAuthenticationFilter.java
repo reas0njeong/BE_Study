@@ -1,7 +1,9 @@
 package com.ll.demo03.global.security;
 
 import com.ll.demo03.domain.auth.auth.service.AuthTokenService;
+import com.ll.demo03.domain.member.member.entity.Member;
 import com.ll.demo03.domain.member.member.service.MemberService;
+import com.ll.demo03.global.app.AppConfig;
 import com.ll.demo03.global.rq.Rq;
 import com.ll.demo03.standard.util.Ut;
 import jakarta.servlet.FilterChain;
@@ -32,20 +34,37 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
     @SneakyThrows
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain filterChain) {
         String accessToken = rq.getCookieValue("accessToken", null);
+        String refreshToken = rq.getCookieValue("refreshToken", null);
 
-        if ( accessToken == null ) {
+        if ( accessToken == null || refreshToken == null ) {
             String authorization = req.getHeader("Authorization");
             if (authorization != null) {
-                accessToken = authorization.substring("bearer ".length());
+                String[] authorizationBits = authorization.substring("bearer ".length()).split(" ",2);
+
+                if ( authorizationBits.length == 2) {
+                    accessToken = authorizationBits[0];
+                    refreshToken = authorizationBits[1];
+                }
             }
         }
-        if ( Ut.str.isBlank(accessToken) ) {
+
+        if (Ut.str.isBlank(accessToken) || Ut.str.isBlank(refreshToken)) {
             filterChain.doFilter(req, resp);
             return;
         }
 
         if (!authTokenService.validateToken(accessToken)) {
-            filterChain.doFilter(req, resp);
+
+            Member member = memberService.findByRefreshToken(refreshToken).orElse(null);
+            if ( member == null ) {
+                filterChain.doFilter(req, resp);
+                return;
+            }
+
+            String newAccessToken = authTokenService.genToken(member, AppConfig.getAccessTokenExpirationSec());
+            rq.setCookie("accessToken", newAccessToken);
+
+            accessToken = newAccessToken;
             return;
         }
 

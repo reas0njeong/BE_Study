@@ -88,7 +88,7 @@ public class ApiV1MemberController {
 
         String accessToken = authTokenService.genToken(member, AppConfig.getAccessTokenExpirationSec());
         rq.setCookie("accessToken", accessToken);
-        rq.setCookie("apiKey", member.getApiKey());
+        rq.setCookie("refreshToken", member.getRefreshToken());
 
         return RsData.of(
                 "200-1",

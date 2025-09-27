@@ -39,4 +39,4 @@ custom:
   site:
     name: "My site"
   accessToken:
-    expirationSec: 60
+    expirationSec: 600
