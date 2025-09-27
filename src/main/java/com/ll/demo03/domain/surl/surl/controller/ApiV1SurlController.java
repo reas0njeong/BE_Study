@@ -2,7 +2,6 @@ package com.ll.demo03.domain.surl.surl.controller;
 
 import com.ll.demo03.domain.auth.auth.service.AuthService;
 import com.ll.demo03.domain.member.member.entity.Member;
-import com.ll.demo03.domain.member.member.service.MemberService;
 import com.ll.demo03.domain.surl.surl.dto.SurlDto;
 import com.ll.demo03.domain.surl.surl.entity.Surl;
 import com.ll.demo03.domain.surl.surl.service.SurlService;
@@ -10,6 +9,8 @@ import com.ll.demo03.global.exception.GlobalException;
 import com.ll.demo03.global.rq.Rq;
 import com.ll.demo03.global.rsData.RsData;
 import com.ll.demo03.standard.dto.Empty;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -22,14 +23,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/surls")
+@RequestMapping(value = "/api/v1/surls")
 @RequiredArgsConstructor
-@Slf4j
 @Transactional(readOnly = true)
+@Slf4j
+
+@Tag(name = "SurlController", description = "Surl CRUD 컨트롤러")
 public class ApiV1SurlController {
     private final SurlService surlService;
     private final AuthService authService;
-    private final MemberService memberService;
     private final Rq rq;
 
     @AllArgsConstructor
@@ -49,6 +51,7 @@ public class ApiV1SurlController {
 
     @PostMapping("")
     @Transactional
+    @Operation(summary = "생성")
     public RsData<SurlAddResBody> add(@RequestBody @Valid SurlAddReqBody reqBody) {
         Member member = rq.getMember();
 
@@ -70,6 +73,7 @@ public class ApiV1SurlController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "단건조회")
     public RsData<SurlGetResBody> get(
             @PathVariable long id
     ) {
@@ -91,6 +95,7 @@ public class ApiV1SurlController {
     }
 
     @GetMapping("")
+    @Operation(summary = "다건조회")
     public RsData<SurlGetItemsResBody> getItems() {
          Member member = rq.getMember();
 
@@ -107,6 +112,7 @@ public class ApiV1SurlController {
 
     @DeleteMapping("/{id}")
     @Transactional
+    @Operation(summary = "삭제")
     public RsData<Empty> delete(
             @PathVariable long id
     ) {
@@ -138,6 +144,7 @@ public class ApiV1SurlController {
 
     @PutMapping("/{id}")
     @Transactional
+    @Operation(summary = "수정")
     public RsData<SurlModifyResBody> modify(
             @PathVariable long id,
             @RequestBody @Valid SurlAddReqBody reqBody) {
